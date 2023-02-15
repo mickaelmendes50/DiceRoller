@@ -3,9 +3,11 @@ package co.mesquita.diceroller
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import android.widget.ImageView
 
 class MainActivity : AppCompatActivity() {
+    private var randomInt = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,22 +23,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rollDice() {
-        val randomInt = (1..6).random()
-        val resultText: TextView = findViewById(R.id.result_text)
-        resultText.text = randomInt.toString()
+        randomInt = (1..6).random()
+        val diceImage: ImageView = findViewById(R.id.dice_image)
+
+        updateDiceImage(randomInt, diceImage)
     }
 
     private fun countUp() {
-        val resultText: TextView = findViewById(R.id.result_text)
-        val newValue = resultText.text.toString().toIntOrNull() ?: 0
+        val diceImage: ImageView = findViewById(R.id.dice_image)
 
-        if (newValue != 6) {
-            resultText.text = (newValue+1).toString()
+        if (randomInt != 6) {
+            updateDiceImage(++randomInt, diceImage)
         }
     }
 
     private fun reset() {
-        val resultText: TextView = findViewById(R.id.result_text)
-        resultText.text = "0"
+        val diceImage: ImageView = findViewById(R.id.dice_image)
+        diceImage.setImageResource(R.drawable.empty_dice)
+
+        randomInt = 0
+    }
+
+    private fun updateDiceImage(randomInt: Int, diceImage: ImageView) {
+        val drawableResource = when (randomInt) {
+            1 -> R.drawable.dice_1
+            2 -> R.drawable.dice_2
+            3 -> R.drawable.dice_3
+            4 -> R.drawable.dice_4
+            5 -> R.drawable.dice_5
+            else -> R.drawable.dice_6
+        }
+
+        diceImage.setImageResource(drawableResource)
     }
 }
